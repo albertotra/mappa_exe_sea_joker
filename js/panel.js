@@ -106,5 +106,5 @@ export function initPanel({ map, db, container, getUnits, getThresholdMs }) {
       $("u-list").appendChild(div);
     }
   }
-  return { renderList, selectUnit };
+  return { renderList, selectUnit, getPoint: () => point };
 }

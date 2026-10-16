@@ -11,6 +11,7 @@ export const DEFAULT_LAYERS = {
   "units": { visible: true, opacity: 1 },
   "markers": { visible: true, opacity: 1 },
   "shapes": { visible: true, opacity: 1 },
+  "objectives": { visible: true, opacity: 1 },
   "utm-grid": { visible: false, opacity: 1 },
   "quadrants": { visible: true, opacity: 1 }
 };

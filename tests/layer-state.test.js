@@ -51,5 +51,5 @@ test("deserialize ignores unknown ids and bad values, keeps valid ones", () => {
 test("serialize/deserialize round trip and DEFAULT_LAYERS has the required ids", () => {
   const s = setVisible(createLayerState(defaults), "ctr10k", false);
   assert.deepEqual(deserialize(serialize(s), defaults), s);
-  for (const id of ["orto10k", "ctr10k", "units", "markers", "shapes", "utm-grid", "quadrants"]) assert.ok(DEFAULT_LAYERS[id], id);
+  for (const id of ["orto10k", "ctr10k", "units", "markers", "shapes", "objectives", "utm-grid", "quadrants"]) assert.ok(DEFAULT_LAYERS[id], id);
 });

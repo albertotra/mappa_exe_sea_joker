@@ -17,6 +17,19 @@ Sito statico (GitHub Pages) + Firebase Realtime Database.
 - **Quadranti:** celle da 250 m, colonne A (est) - M (ovest), righe 1 (nord) - 11. Visibili con il layer
   "Quadranti"; a zoom alto compaiono i nomi delle celle.
 
+## Tab
+
+Dopo il PIN la console ha tre tab (l'URL ricorda quella aperta: `#mappa`, `#medevac`, `#obiettivi`).
+
+- **MAPPA:** tutto quanto sopra. Le notifiche di posizione GPS compaiono in ogni tab e un contatore sulla tab MAPPA le segnala.
+- **MEDEVAC:** log dei passaggi dalle safehouse. Ogni evento ha safehouse, fazione, **black** (morti), **yellow** (feriti),
+  orario modificabile e nota. Mostra totali per fazione, tabella safehouse × fazione ed elenco con modifica/elimina.
+- **OBIETTIVI:** obiettivi creati a mano (nome + posizione). Ogni conquista registra fazione, squadra e orario; lo storico
+  resta completo e il possessore attuale è l'ultima conquista. Sulla mappa il layer "Obiettivi" mostra una bandierina
+  col colore del possessore.
+
+Fazioni: REDFOR (verde), BLUFOR (blu), NEUTRALE (grigio).
+
 ## Sviluppo locale
 
 ```bash
@@ -40,7 +53,7 @@ Realtime Database, regole:
 ```
 
 Dati sotto `/ops/<PIN>/`: `units`, `pending` (posizioni GPS in attesa), `markers`, `shapes`, `meta`
-(`staleMinutes`: soglia dato vecchio, default 15).
+(`staleMinutes`: soglia dato vecchio, default 15), `medevac` e `objectives` (con `captures`).
 
 ## Cosa è pubblico
 

@@ -10,15 +10,24 @@
 <body>
 <div id="banner">OFFLINE</div>
 <div id="notifs"></div>
-<div id="app">
-  <aside id="side">
-    <div id="panel-pin"></div>
-    <div id="panel-coords"></div>
-    <div id="panel-draw"></div>
-    <div id="panel-layers"></div>
-  </aside>
-  <div id="map"></div>
-</div>
+<header id="tabs">
+  <button data-tab="mappa" class="on" onclick="location.hash='#mappa'">MAPPA <span id="pend-count" class="badge" hidden></span></button>
+  <button data-tab="medevac" onclick="location.hash='#medevac'">MEDEVAC</button>
+  <button data-tab="obiettivi" onclick="location.hash='#obiettivi'">OBIETTIVI</button>
+</header>
+<main id="tab-mappa" class="tab">
+  <div id="app">
+    <aside id="side">
+      <div id="panel-pin"></div>
+      <div id="panel-coords"></div>
+      <div id="panel-draw"></div>
+      <div id="panel-layers"></div>
+    </aside>
+    <div id="map"></div>
+  </div>
+</main>
+<main id="tab-medevac" class="tab page" hidden><div id="medevac-root"></div></main>
+<main id="tab-obiettivi" class="tab page" hidden><div id="objectives-root"></div></main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/milsymbol@2.2.0/dist/milsymbol.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>

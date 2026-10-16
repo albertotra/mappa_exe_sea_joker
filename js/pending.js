@@ -43,6 +43,8 @@ export function initPending({ map, db, container, ghostLayer, getUnit }) {
         icon: L.divIcon({ className: "unit-icon ghost", html: `${sym.asSVG()}<div class="cs">${esc(callsign)}?</div>`, iconSize: [60, 44], iconAnchor: [30, 16] })
       }).addTo(ghostLayer);
     }
+    const badge = document.getElementById("pend-count");
+    if (badge) { badge.textContent = entries.length ? String(entries.length) : ""; badge.hidden = !entries.length; }
     document.title = (entries.length ? `(${entries.length}) ` : "") + "Mappa Sea Joker";
     if (fresh) beep();
   }

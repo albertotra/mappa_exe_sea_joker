@@ -8,17 +8,22 @@ import { initPanel, renderMarkers } from "./panel.js";
 import { initPending } from "./pending.js";
 import { initDraw, renderShapes } from "./draw.js";
 import { DEFAULT_STALE_MINUTES } from "./config.js";
+import { initTabs } from "./tabs.js";
+import { initMedevac } from "./medevac-ui.js";
+import { initObjectives } from "./objectives-ui.js";
 
 const { map, baseLayers } = createMap("map");
+initTabs({ onShow: (tab) => { if (tab === "mappa") setTimeout(() => map.invalidateSize(), 0); } });
 
 const [kmlText, overlayMeta] = await Promise.all([
   fetch("data/trazzonara.kml").then((r) => r.text()),
   fetch("data/overlays.json").then((r) => r.json())
 ]);
-const kml = buildKmlLayers(parseKml(kmlText));
+const kmlFeatures = parseKml(kmlText);
+const kml = buildKmlLayers(kmlFeatures);
 const images = buildOverlayImages(overlayMeta);
 
-const operative = { units: L.layerGroup(), markers: L.layerGroup(), shapes: L.layerGroup(), "utm-grid": L.layerGroup(), quadrants: L.layerGroup() };
+const operative = { units: L.layerGroup(), markers: L.layerGroup(), shapes: L.layerGroup(), objectives: L.layerGroup(), "utm-grid": L.layerGroup(), quadrants: L.layerGroup() };
 
 initLayerPanel({
   container: document.getElementById("panel-layers"),
@@ -38,6 +43,7 @@ initLayerPanel({
       { id: "units", label: "Unità", layer: operative.units },
       { id: "markers", label: "Segnalini", layer: operative.markers },
       { id: "shapes", label: "Disegni", layer: operative.shapes },
+      { id: "objectives", label: "Obiettivi", layer: operative.objectives },
       { id: "quadrants", label: "Quadranti A-M / 1-11", layer: operative.quadrants },
       { id: "utm-grid", label: "Griglia UTM 1 km", layer: operative["utm-grid"] } ] }
   ]
@@ -80,6 +86,10 @@ function start(pin) {
   const panel = initPanel({ map, db, container: document.getElementById("panel-coords"), getUnits: () => units, getThresholdMs: thresholdMs });
   initDraw({ map, db, container: document.getElementById("panel-draw") });
   initPending({ map, db, container: document.getElementById("notifs"), ghostLayer: ghosts, getUnit: (cs) => units[cs] });
+
+  const safehouses = kmlFeatures.filter((f) => f.group === "safehouse").map((f) => f.name).sort((a, b) => a.localeCompare(b, "it", { numeric: true }));
+  initMedevac({ container: document.getElementById("medevac-root"), db, getSafehouses: () => safehouses });
+  initObjectives({ container: document.getElementById("objectives-root"), db, layer: operative.objectives, getUnits: () => units, getPoint: () => panel.getPoint() });
 
   const moveUnit = (cs, lat, lon) => db.setUnit(cs, { ...units[cs], lat, lon, ts: Date.now(), source: "manual" });
   const drawUnits = () => { renderUnits(operative.units, units, Date.now(), thresholdMs(), moveUnit, panel.selectUnit); panel.renderList(); };
