@@ -2,3 +2,5 @@
 files/progetto_esempio/
 files/OPORD*.pdf
 files/*10K*.pdf
+.superpowers/
+node_modules/

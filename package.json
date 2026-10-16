@@ -1,0 +1,7 @@
+{
+  "name": "mappa-sea-joker",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/" },
+  "devDependencies": { "@xmldom/xmldom": "0.8.10" }
+}
