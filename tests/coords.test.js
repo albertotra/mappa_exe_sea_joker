@@ -77,7 +77,7 @@ test("parseCoordinate rejects invalid input with a message", () => {
 test("gridRef: battleship quadrants of 250 m (A-M right to left, 1-11 top to bottom)", () => {
   assert.equal(gridRef(utmToLatLon({ zone: 33, hemisphere: "N", easting: 701700, northing: 4501400 })), "A1");
   assert.equal(gridRef(utmToLatLon({ zone: 33, hemisphere: "N", easting: 698600, northing: 4498900 })), "M11");
-  assert.equal(gridRef(utmToLatLon({ zone: 33, hemisphere: "N", easting: 700100, northing: 4500200 })), "F5");
+  assert.equal(gridRef(utmToLatLon({ zone: 33, hemisphere: "N", easting: 700400, northing: 4500400 })), "F5");
   assert.equal(gridRef({ lat: 45, lon: 9 }), null);
 });
 
