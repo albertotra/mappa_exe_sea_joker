@@ -18,3 +18,5 @@ input[type=text] { width:100%; }
 .unit-stale { opacity:.45; }
 .grid-label { color:#fff; font-size:11px; text-shadow:0 0 3px #000; white-space:nowrap; }
 @media (max-width:700px){ #app{grid-template-columns:1fr; grid-template-rows:auto 1fr;} #side{max-height:40vh;} }
+.kml-label { background:rgba(0,0,0,.55); color:#fff; border:none; box-shadow:none; font-size:11px; padding:0 4px; }
+.kml-label::before { display:none; }
