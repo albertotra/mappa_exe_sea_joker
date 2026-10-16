@@ -56,9 +56,14 @@ sposta mai. Se l'admin sposta un punto, cambia solo il suo lat/lon.
 - **Import KML** all'avvio da `data/trazzonara.kml` (Point, LineString, Polygon, stili per tipo).
 
 ## Dati Firebase (`/ops/<PIN>/`)
-`units/<callsign>` {lat, lon, acc, ts, status, note, source: manual|gps} ·
+`units/<callsign>` {lat, lon, acc, ts, status, note, source: manual|gps, faction, squad} ·
+`pending/<callsign>` {lat, lon, acc, ts, faction, squad} (posizioni GPS in attesa) ·
 `markers/<id>` · `shapes/<id>` · `meta` (soglia dato vecchio, ecc.).
-Scrittura manuale dalla console e GPS dal telefono sullo stesso nodo `units`; vince l'ultimo `ts`.
+**Il telefono scrive solo in `pending/`.** La console mostra ogni nuova posizione come notifica con
+Accetta / Rifiuta (con anteprima fantasma sulla mappa): Accetta la copia in `units/` e svuota il pending,
+Rifiuta lo cancella. Un nuovo push dello stesso callsign sostituisce quello in attesa.
+`faction` e `squad` sono campi di input compilati da chi usa il telefono (e modificabili dalla console):
+faction a scelta tra REDFOR, BLUFOR, NEUTRALE, squad nome libero. La faction decide l'affiliazione APP-6.
 
 ## Setup Firebase (da fare dall'utente)
 1. https://console.firebase.google.com → **Aggiungi progetto** (es. `sea-joker-26`), Analytics disattivato.

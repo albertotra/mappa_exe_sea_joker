@@ -200,3 +200,9 @@ export function formatAll(lat, lon) {
     grid: gridRef({ lat, lon })
   };
 }
+
+// UTM forzato su una zona (per griglie che attraversano il confine di fuso o seguono il fuso di gioco)
+export function latLonToUtmInZone(lat, lon, zone) {
+  const { easting, northing } = forward(lat, lon, zone);
+  return { zone, band: bandOf(lat), hemisphere: lat < 0 ? "S" : "N", easting, northing };
+}

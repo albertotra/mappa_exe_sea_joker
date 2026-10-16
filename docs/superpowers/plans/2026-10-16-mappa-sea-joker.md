@@ -136,6 +136,19 @@
 - [ ] **Step 5:** Nella console: richiesta PIN all'avvio (salvato in `localStorage`, pulsante "Cambia PIN"); banner OFFLINE se `onConnection(false)`. Verifica a mano: scrivere da console browser `db.setUnit("ECHO", {...})` mostra la pedina; PIN errato → mappa senza unità e nessun errore non gestito.
 - [ ] **Step 6: Commit** `feat: realtime units with APP-6 symbols and stale detection`
 
+### Task 6b: Notifiche di posizione (accetta / rifiuta)
+
+**Files:** Create `js/pending.js`; Modify `js/units.js`, `js/db.js`, `tests/units.test.js`, `index.html`, `css/style.css`
+
+**Interfaces:**
+- Produces (`units.js`): `acceptPending(p: Pending, prev?: Unit): Unit` (copia lat/lon/acc/ts, `source:"gps"`, tiene `status`/`note` di `prev`, `faction`/`squad` da `p` con fallback a `prev`, default `faction:"REDFOR"`); `unitSidc(callsign, faction = "REDFOR")` (REDFOR=amico `SFG`, BLUFOR=ostile `SHG`, NEUTRALE=`SNG`).
+- Produces (`db.js`): `onPending(cb)`, `setPending(callsign, p)`, `removePending(callsign)`.
+- Produces (`pending.js`): `initPending({ map, db, container, getUnit }): void` — card di notifica per ogni pending (callsign, fazione · squadra, quadrante, precisione, età) con Accetta/Rifiuta e pedina fantasma tratteggiata sulla mappa.
+
+- [ ] Test: `acceptPending` conserva `status`/`note`, imposta `source:"gps"`; `unitSidc("ECHO","BLUFOR")` inizia con `SHG`, `"NEUTRALE"` con `SNG`.
+- [ ] Implementa; verifica a mano con due schede browser: il pending compare come notifica, Accetta sposta la pedina, Rifiuta no.
+- [ ] Commit `feat: GPS position notifications with accept/reject`
+
 ### Task 7: Inserimento coordinate e gestione unità/segnalini
 
 **Files:**
@@ -173,6 +186,7 @@
 
 **Interfaces:**
 - Consumes: `connect` (Task 6), `CALLSIGNS` (Task 1).
+- NB: la pagina telefono scrive in `pending/<callsign>` (non in `units/`) e ha come campi di input fazione (REDFOR/BLUFOR/NEUTRALE) e nome squadra (testo libero), salvati in localStorage.
 - Produces (`track.js`): `buildUnitUpdate(pos: { coords: { latitude, longitude, accuracy } }, now: number, prev?: Unit): Unit` → `{ lat, lon, acc, ts: now, source: "gps", status: prev?.status ?? "", note: prev?.note ?? "" }`; `describeGeoError(code: 1|2|3): string` (italiano: permesso negato, posizione non disponibile, timeout).
 
 - [ ] **Step 1: Test che falliscono**: `buildUnitUpdate` con coordinate note produce `source "gps"` e conserva `status`/`note` precedenti; `describeGeoError(1)` contiene "permesso".
