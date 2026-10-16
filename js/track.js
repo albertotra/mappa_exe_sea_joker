@@ -32,6 +32,8 @@ function init() {
   $("callsigns").innerHTML = CALLSIGNS.map((c) => `<option value="${c}">`).join("");
   $("faction").innerHTML = FACTIONS.map((f) => `<option>${f}</option>`).join("");
   for (const id of ["pin", "callsign", "faction", "squad"]) { const v = store.get(`sj-track-${id}`); if (v) $(id).value = v; }
+  const urlPin = new URLSearchParams(location.search).get("pin");
+  if (urlPin) { $("pin").value = urlPin; history.replaceState(null, "", location.pathname); }
   let watchId = null, wake = null, last, latest = null, db = null, timer = null;
   const say = (t, bad = false) => { $("status").textContent = t; $("status").className = bad ? "err" : "ok"; };
 

@@ -43,7 +43,7 @@ function unitIcon(callsign, stale, status, faction) {
   return L.divIcon({
     className: `unit-icon${stale ? " unit-stale" : ""}`,
     html: `${svg}<div class="cs">${esc(callsign)}${flag}</div>`,
-    iconSize: [w + 20, h + 16], iconAnchor: [(w + 20) / 2, h / 2 + 2]
+    iconSize: [w + 20, h + 16], iconAnchor: [10 + sym.getAnchor().x, sym.getAnchor().y]
   });
 }
 

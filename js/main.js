@@ -61,6 +61,9 @@ function showPinForm(msg = "") {
   });
 }
 
+// ?pin=XXXX salva il PIN e lo toglie dall'URL (comodo per aprire il link su un altro dispositivo)
+const urlPin = new URLSearchParams(location.search).get("pin");
+if (urlPin && validatePin(urlPin)) { writePin(urlPin); history.replaceState(null, "", location.pathname); }
 const pin = readPin();
 if (!validatePin(pin)) {
   showPinForm();

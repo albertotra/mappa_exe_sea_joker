@@ -102,3 +102,9 @@ test("formatAll returns four formats plus quadrant", () => {
   assert.ok(f.dms.includes("N"));
   assert.ok(f.grid === null || /^[A-M]\d{1,2}$/.test(f.grid));
 });
+
+test("mgrs does not lose a metre to floating point noise on round numbers", () => {
+  const p = utmToLatLon({ zone: 33, band: "T", easting: 700500, northing: 4500500 });
+  assert.match(latLonToMgrs(p.lat, p.lon), /00500 ?00500$|0050000500$/);
+  assert.match(formatAll(p.lat, p.lon).utm, /^33T 700500 4500500$/);
+});

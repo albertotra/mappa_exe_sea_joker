@@ -60,8 +60,8 @@ export function latLonToMgrs(lat, lon, digits = 5) {
   const col = COL_SETS[u.zone % 3][Math.floor(u.easting / 1e5) - 1];
   const row = ROW_LETTERS[(Math.floor(u.northing / 1e5) + (u.zone % 2 === 0 ? 5 : 0)) % 20];
   const div = 10 ** (5 - digits);
-  const e = String(Math.floor((u.easting % 1e5) / div)).padStart(digits, "0");
-  const n = String(Math.floor((u.northing % 1e5) / div)).padStart(digits, "0");
+  const e = String(Math.floor((u.easting % 1e5) / div + 1e-3 / div)).padStart(digits, "0");
+  const n = String(Math.floor((u.northing % 1e5) / div + 1e-3 / div)).padStart(digits, "0");
   return `${String(u.zone).padStart(2, "0")}${u.band}${col}${row}${e}${n}`;
 }
 
