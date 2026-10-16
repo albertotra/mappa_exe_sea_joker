@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>mini</name>
+<Placemark><name>SAFEHOUSE 3</name><Point><coordinates>17.2,40.6,0</coordinates></Point></Placemark>
+<Placemark><name>SAM 1</name><Point><coordinates>17.21,40.61,0</coordinates></Point></Placemark>
+<Placemark><name>BASE ROAD</name><LineString><coordinates>17.2,40.6,0 17.3,40.7,0</coordinates></LineString></Placemark>
+<Placemark><name>LIMITE CAMPO</name><LineString><coordinates>17.2,40.6,0 17.3,40.7,0 17.2,40.7,0</coordinates></LineString></Placemark>
+<Placemark><name>SETTORE BOSCO 1</name><Polygon>
+<outerBoundaryIs><LinearRing><coordinates>17.0,40.0,0 17.1,40.0,0 17.1,40.1,0 17.0,40.0,0</coordinates></LinearRing></outerBoundaryIs>
+<innerBoundaryIs><LinearRing><coordinates>17.02,40.02,0 17.04,40.02,0 17.04,40.04,0 17.02,40.02,0</coordinates></LinearRing></innerBoundaryIs>
+</Polygon></Placemark>
+<Placemark><name>Poligono senza titolo</name><Polygon><outerBoundaryIs><LinearRing><coordinates>17.0,40.0,0 17.1,40.0,0 17.1,40.1,0 17.0,40.0,0</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Poligono senza titolo</name><Polygon><outerBoundaryIs><LinearRing><coordinates>17.5,40.5,0 17.6,40.5,0 17.6,40.6,0 17.5,40.5,0</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+</Document></kml>
