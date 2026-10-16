@@ -12,6 +12,7 @@ export function formatAge(ts, now) {
 }
 
 export const FACTIONS = ["REDFOR", "BLUFOR", "NEUTRALE"];
+export const FACTION_COLORS = { REDFOR: "#4dff88", BLUFOR: "#4da6ff", NEUTRALE: "#b0b0b0", LIBERO: "#ffffff" };
 const AFFILIATION = { REDFOR: "F", BLUFOR: "H", NEUTRALE: "N" };
 
 // SIDC APP-6/2525C legacy, 15 caratteri, a terra; l'affiliazione segue la fazione.
