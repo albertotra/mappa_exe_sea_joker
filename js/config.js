@@ -15,4 +15,6 @@ export const CALLSIGNS = [
 
 export const STATUSES = ["", "in movimento", "fermo", "in contatto", "neutralizzato"];
 export const DEFAULT_STALE_MINUTES = 15;
-export const MAP_CENTER = [40.62085281, 17.36311714];
+export const FOB = [40.62917330355073, 17.37509151942128]; // FOB/PARCHEGGIO dal KML: posizione iniziale del Comando
+export const MAP_CENTER = FOB;
+export const MAP_ZOOM = 16;

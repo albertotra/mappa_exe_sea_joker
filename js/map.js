@@ -1,4 +1,4 @@
-import { MAP_CENTER } from "./config.js";
+import { MAP_CENTER, MAP_ZOOM } from "./config.js";
 
 export function createMap(containerId) {
   const baseLayers = {
@@ -9,7 +9,7 @@ export function createMap(containerId) {
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       { maxZoom: 19, attribution: "© OpenStreetMap" })
   };
-  const map = L.map(containerId, { zoomControl: true, maxZoom: 19 }).setView(MAP_CENTER, 15);
+  const map = L.map(containerId, { zoomControl: true, maxZoom: 19 }).setView(MAP_CENTER, MAP_ZOOM);
   baseLayers["Satellite"].addTo(map);
   return { map, baseLayers };
 }
