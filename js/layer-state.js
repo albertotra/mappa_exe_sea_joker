@@ -4,6 +4,7 @@ export const DEFAULT_LAYERS = {
   "ctr10k": { visible: false, opacity: 0.8 },
   "kml-poi": { visible: true, opacity: 1 },
   "kml-safehouse": { visible: true, opacity: 1 },
+  "kml-lz": { visible: true, opacity: 1 },
   "kml-strada": { visible: true, opacity: 1 },
   "kml-settore": { visible: true, opacity: 1 },
   "kml-zona": { visible: true, opacity: 1 },

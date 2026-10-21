@@ -17,7 +17,9 @@ function groupOf(name, kind) {
   const n = name.toUpperCase();
   if (n.startsWith("SAFEHOUSE")) return "safehouse";
   if (n.startsWith("SETTORE")) return "settore";
-  if (n.startsWith("LIMITE")) return "limite";
+  if (n.startsWith("LIMITE") || n.startsWith("CONFINI")) return "limite";
+  if (kind === "point" && /^LZ [TA]\d+$/.test(n)) return "lz"; // punti di recupero blu (LZ INDIA e' di infiltrazione)
+  if (n.startsWith("AREA ")) return "zona";
   if (kind === "line") return "strada";
   if (kind === "polygon") return "zona";
   return "poi";

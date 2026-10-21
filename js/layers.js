@@ -7,7 +7,7 @@ const GROUP_STYLE = {
   "kml-limite": { color: "#ff4d4d", weight: 3, fillOpacity: 0 },
   "kml-strada": { color: "#ffffff", weight: 3, opacity: 0.85 }
 };
-const POINT_COLOR = { "kml-safehouse": "#4dff88", "kml-poi": "#ffb84d" };
+const POINT_COLOR = { "kml-safehouse": "#4dff88", "kml-lz": "#4da6ff", "kml-poi": "#ffb84d" };
 
 export function loadState() {
   try { return deserialize(localStorage.getItem(STORAGE_KEY), DEFAULT_LAYERS); }

@@ -7,7 +7,7 @@ import { toLocalInput, fromLocalInput, fmtTime } from "./timefmt.js";
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const dot = (f) => `<span class="dot" style="background:${FACTION_COLORS[f] || FACTION_COLORS.LIBERO}"></span>`;
 
-export function initObjectives({ container, db, layer, getUnits, getPoint }) {
+export function initObjectives({ container, db, seeds = [], layer, getUnits, getPoint }) {
   container.innerHTML = `
     <div class="cols">
       <section class="card"><h2>NUOVO OBIETTIVO</h2>
@@ -25,7 +25,16 @@ export function initObjectives({ container, db, layer, getUnits, getPoint }) {
     </div>
     <section class="card"><h2>OBIETTIVI</h2><div id="ob-list"></div></section>`;
   const $ = (id) => container.querySelector(`#${id}`);
+  let dbObjectives = {};
   let objectives = {};
+  const seedIds = new Set(seeds.map((s) => s.id));
+  // Obiettivi del KML (nome e posizione fissi) + quelli creati a mano; le conquiste vengono sempre dal database.
+  const merge = () => {
+    const out = {};
+    for (const s of seeds) out[s.id] = { name: s.name, lat: s.lat, lon: s.lon, side: s.side, captures: dbObjectives[s.id]?.captures };
+    for (const [id, o] of Object.entries(dbObjectives)) if (!seedIds.has(id)) out[id] = o;
+    objectives = out;
+  };
   const open = new Set();
   $("cp-time").value = toLocalInput(Date.now());
 
@@ -66,12 +75,12 @@ export function initObjectives({ container, db, layer, getUnits, getPoint }) {
       const caps = sortedCaptures(o.captures);
       const card = document.createElement("div");
       card.className = "objrow";
-      card.innerHTML = `<div class="head"><b>${esc(o.name)}</b> <span class="dim">${gridRef(o) || "fuori griglia"}</span>
+      card.innerHTML = `<div class="head"><b>${esc(o.name)}</b> ${o.side ? dot(o.side) : ""}<span class="dim">${gridRef(o) || "fuori griglia"}</span>
         <span class="owner">${owner ? `${dot(owner.faction)}${owner.faction}${owner.squad ? ` · ${esc(owner.squad)}` : ""} · ${fmtTime(owner.ts)}` : '<span class="dim">libero</span>'}</span>
-        <span class="acts"><button data-h>Storico (${caps.length})</button><button data-d>Elimina</button></span></div>
+        <span class="acts"><button data-h>Storico (${caps.length})</button><button data-d>${seedIds.has(id) ? "Azzera storico" : "Elimina"}</button></span></div>
         <div class="hist" ${open.has(id) ? "" : "hidden"}>${caps.map((c) => `<div class="logrow">${dot(c.faction)}<b>${c.faction}</b>${c.squad ? ` · ${esc(c.squad)}` : ""} · ${fmtTime(c.ts)} <button data-c="${c.id}">Elimina</button></div>`).join("") || '<div class="dim">nessuna conquista</div>'}</div>`;
       card.querySelector("[data-h]").addEventListener("click", () => { open.has(id) ? open.delete(id) : open.add(id); render(); });
-      card.querySelector("[data-d]").addEventListener("click", () => { if (confirm(`Eliminare l'obiettivo "${o.name}" e il suo storico?`)) db.removeObjective(id); });
+      card.querySelector("[data-d]").addEventListener("click", () => { if (confirm(seedIds.has(id) ? `Azzerare lo storico di "${o.name}"?` : `Eliminare l'obiettivo "${o.name}" e il suo storico?`)) db.removeObjective(id); });
       card.querySelectorAll("[data-c]").forEach((b) => b.addEventListener("click", () => { if (confirm("Eliminare questa conquista?")) db.removeCapture(id, b.dataset.c); }));
       $("ob-list").appendChild(card);
 
@@ -83,7 +92,7 @@ export function initObjectives({ container, db, layer, getUnits, getPoint }) {
       }
     }
   }
-  render();
-  db.onObjectives((v) => { objectives = v; render(); });
+  merge(); render();
+  db.onObjectives((v) => { dbObjectives = v || {}; merge(); render(); });
   return { render };
 }

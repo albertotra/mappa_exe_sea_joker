@@ -10,16 +10,19 @@ import { initDraw, renderShapes } from "./draw.js";
 import { DEFAULT_STALE_MINUTES } from "./config.js";
 import { initTabs } from "./tabs.js";
 import { initMedevac } from "./medevac-ui.js";
+import { SOURCES, recoveryPoints, objectiveSeeds } from "./sources.js";
 import { initObjectives } from "./objectives-ui.js";
 
 const { map, baseLayers } = createMap("map");
 initTabs({ onShow: (tab) => { if (tab === "mappa") setTimeout(() => map.invalidateSize(), 0); } });
 
-const [kmlText, overlayMeta] = await Promise.all([
-  fetch("data/trazzonara.kml").then((r) => r.text()),
+const [kmlTexts, overlayMeta] = await Promise.all([
+  Promise.all(SOURCES.map((s) => fetch(s.file).then((r) => r.text()))),
   fetch("data/overlays.json").then((r) => r.json())
 ]);
-const kmlFeatures = parseKml(kmlText);
+const featuresBySide = SOURCES.map((s, i) => ({ side: s.faction, features: parseKml(kmlTexts[i]).map((f) => ({ ...f, id: `${s.faction}-${f.id}` })) }));
+const kmlFeatures = featuresBySide.flatMap((x) => x.features);
+const objectiveSeedList = featuresBySide.flatMap((x) => objectiveSeeds(x.features, x.side));
 const kml = buildKmlLayers(kmlFeatures);
 const images = buildOverlayImages(overlayMeta);
 
@@ -34,7 +37,8 @@ initLayerPanel({
       { id: "ctr10k", label: overlayMeta.ctr10k.label, layer: images.ctr10k, opacity: true } ] },
     { title: "KML", items: [
       { id: "kml-poi", label: "Punti di interesse", layer: kml["kml-poi"] },
-      { id: "kml-safehouse", label: "SAFEHOUSE", layer: kml["kml-safehouse"] },
+      { id: "kml-safehouse", label: "SAFEHOUSE (verdi)", layer: kml["kml-safehouse"] },
+      { id: "kml-lz", label: "LZ blu (recupero)", layer: kml["kml-lz"] },
       { id: "kml-strada", label: "Strade / route", layer: kml["kml-strada"] },
       { id: "kml-settore", label: "Settori", layer: kml["kml-settore"] },
       { id: "kml-zona", label: "Zone", layer: kml["kml-zona"] },
@@ -87,9 +91,9 @@ function start(pin) {
   initDraw({ map, db, container: document.getElementById("panel-draw") });
   initPending({ map, db, container: document.getElementById("notifs"), ghostLayer: ghosts, getUnit: (cs) => units[cs] });
 
-  const safehouses = kmlFeatures.filter((f) => f.group === "safehouse").map((f) => f.name).sort((a, b) => a.localeCompare(b, "it", { numeric: true }));
+  const safehouses = recoveryPoints(kmlFeatures);
   initMedevac({ container: document.getElementById("medevac-root"), db, getSafehouses: () => safehouses });
-  initObjectives({ container: document.getElementById("objectives-root"), db, layer: operative.objectives, getUnits: () => units, getPoint: () => panel.getPoint() });
+  initObjectives({ container: document.getElementById("objectives-root"), db, seeds: objectiveSeedList, layer: operative.objectives, getUnits: () => units, getPoint: () => panel.getPoint() });
 
   const moveUnit = (cs, lat, lon) => db.setUnit(cs, { ...units[cs], lat, lon, ts: Date.now(), source: "manual" });
   const drawUnits = () => { renderUnits(operative.units, units, Date.now(), thresholdMs(), moveUnit, panel.selectUnit); panel.renderList(); };

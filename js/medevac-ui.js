@@ -11,7 +11,7 @@ export function initMedevac({ container, db, getSafehouses }) {
   container.innerHTML = `
     <div class="cols">
       <section class="card"><h2 id="mv-title">REGISTRA PASSAGGIO MEDEVAC</h2>
-        <label>Safehouse</label><select id="mv-sh"></select>
+        <label>Punto di recupero (safehouse / LZ)</label><select id="mv-sh"></select>
         <input type="text" id="mv-sh-free" placeholder="Nome safehouse / punto" hidden>
         <label>Fazione</label><select id="mv-faction">${FACTIONS.map((f) => `<option>${f}</option>`).join("")}</select>
         <div class="two"><div><label>Black (morti)</label><input type="number" id="mv-black" min="0" max="99" step="1" placeholder="0"></div>
