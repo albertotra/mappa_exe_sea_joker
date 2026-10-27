@@ -24,6 +24,8 @@ Dopo il PIN la console ha tre tab (l'URL ricorda quella aperta: `#mappa`, `#mede
 - **MAPPA:** tutto quanto sopra. Le notifiche di posizione GPS compaiono in ogni tab e un contatore sulla tab MAPPA le segnala.
 - **MEDEVAC:** log dei passaggi dai punti di recupero (11 SAFEHOUSE verdi + 22 LZ blu T1–T12 / A1–A10, letti dai KML). Ogni evento ha safehouse, fazione, **black** (morti), **yellow** (feriti),
   orario modificabile e nota. Mostra totali per fazione, tabella safehouse × fazione ed elenco con modifica/elimina.
+- **EXPORT EXCEL:** il bottone nell'header scarica `report-sea-joker-AAAAMMGG-HHMM.xlsx` con 4 fogli: Riepilogo, Medevac log,
+  Medevac per safehouse, Obiettivi (storico conquiste con quadrante e MGRS). ExcelJS viene caricato da CDN al primo click.
 - **OBIETTIVI:** obiettivi creati a mano (nome + posizione). Ogni conquista registra fazione, squadra e orario; lo storico
   resta completo e il possessore attuale è l'ultima conquista. Sulla mappa il layer "Obiettivi" mostra una bandierina
   col colore del possessore.

@@ -94,5 +94,5 @@ export function initObjectives({ container, db, seeds = [], layer, getUnits, get
   }
   merge(); render();
   db.onObjectives((v) => { dbObjectives = v || {}; merge(); render(); });
-  return { render };
+  return { render, getObjectives: () => objectives };
 }

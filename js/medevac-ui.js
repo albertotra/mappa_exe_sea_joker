@@ -89,5 +89,5 @@ export function initMedevac({ container, db, getSafehouses }) {
 
   resetForm(); fillSafehouses(); render();
   db.onMedevac((v) => { events = v; render(); });
-  return { fillSafehouses };
+  return { fillSafehouses, getEvents: () => events };
 }

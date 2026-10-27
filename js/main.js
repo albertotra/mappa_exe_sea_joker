@@ -12,6 +12,16 @@ import { initTabs } from "./tabs.js";
 import { initMedevac } from "./medevac-ui.js";
 import { SOURCES, recoveryPoints, objectiveSeeds } from "./sources.js";
 import { initObjectives } from "./objectives-ui.js";
+import { buildReport } from "./report.js";
+import { downloadReport } from "./export-xlsx.js";
+
+const EXCELJS_URL = "https://unpkg.com/exceljs@4.4.0/dist/exceljs.min.js";
+// ExcelJS pesa ~1 MB: lo carico solo alla prima esportazione.
+const loadExcelJs = () => window.ExcelJS ? Promise.resolve(window.ExcelJS) : new Promise((ok, ko) => {
+  const s = document.createElement("script");
+  s.src = EXCELJS_URL; s.onload = () => ok(window.ExcelJS); s.onerror = () => ko(new Error("ExcelJS non caricato"));
+  document.head.appendChild(s);
+});
 
 const { map, baseLayers } = createMap("map");
 initTabs({ onShow: (tab) => { if (tab === "mappa") setTimeout(() => map.invalidateSize(), 0); } });
@@ -92,8 +102,19 @@ function start(pin) {
   initPending({ map, db, container: document.getElementById("notifs"), ghostLayer: ghosts, getUnit: (cs) => units[cs] });
 
   const safehouses = recoveryPoints(kmlFeatures);
-  initMedevac({ container: document.getElementById("medevac-root"), db, getSafehouses: () => safehouses });
-  initObjectives({ container: document.getElementById("objectives-root"), db, seeds: objectiveSeedList, layer: operative.objectives, getUnits: () => units, getPoint: () => panel.getPoint() });
+  const medevac = initMedevac({ container: document.getElementById("medevac-root"), db, getSafehouses: () => safehouses });
+  const objectivesUi = initObjectives({ container: document.getElementById("objectives-root"), db, seeds: objectiveSeedList, layer: operative.objectives, getUnits: () => units, getPoint: () => panel.getPoint() });
+
+  const exportBtn = document.getElementById("export-xlsx");
+  exportBtn.disabled = false;
+  exportBtn.addEventListener("click", async () => {
+    exportBtn.disabled = true;
+    try {
+      const ExcelJS = await loadExcelJs();
+      await downloadReport(ExcelJS, buildReport({ events: medevac.getEvents(), objectives: objectivesUi.getObjectives() }));
+    } catch (e) { console.error(e); alert("Export non riuscito (serve la connessione per caricare la libreria Excel)."); }
+    exportBtn.disabled = false;
+  });
 
   const moveUnit = (cs, lat, lon) => db.setUnit(cs, { ...units[cs], lat, lon, ts: Date.now(), source: "manual" });
   const drawUnits = () => { renderUnits(operative.units, units, Date.now(), thresholdMs(), moveUnit, panel.selectUnit); panel.renderList(); };

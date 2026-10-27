@@ -26,7 +26,7 @@ export function validateMedevac(input, now) {
 }
 
 const entries = (events) => (Array.isArray(events) ? events.map((e, i) => [String(i), e]) : Object.entries(events || {}));
-const isValidEvent = (e) => e && typeof e === "object" && typeof e.safehouse === "string" && e.safehouse.trim() && FACTIONS.includes(e.faction) && Number.isInteger(e.black) && Number.isInteger(e.yellow) && e.black >= 0 && e.yellow >= 0;
+export const isValidEvent =(e) => e && typeof e === "object" && typeof e.safehouse === "string" && e.safehouse.trim() && FACTIONS.includes(e.faction) && Number.isInteger(e.black) && Number.isInteger(e.yellow) && e.black >= 0 && e.yellow >= 0;
 
 export function medevacTotals(events) {
   const t = Object.fromEntries(FACTIONS.map((f) => [f, { black: 0, yellow: 0, total: 0 }]));
